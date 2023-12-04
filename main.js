@@ -1,5 +1,7 @@
+// main.js
+
 const fs = require('fs');
-const { exec } = require('child_process');
+const player = require('play-sound')();
 
 const musicFolder = './music/';
 
@@ -20,7 +22,7 @@ function searchMusicByArtist(artist) {
 function playMusic(artist, song) {
   const artistFolder = musicFolder + artist + '/';
   const songPath = artistFolder + song;
-  exec(`mpg123 "${songPath}"`, (err) => {
+  player.play(songPath, (err) => {
     if (err) {
       console.error('Error playing music:', err);
     }
