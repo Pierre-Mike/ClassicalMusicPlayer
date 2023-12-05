@@ -65,6 +65,9 @@ function downloadAndUnzipMusic(): void {
           console.error('Error during download and unzipping:', error);
         });
     });
+  }).on('error', (error) => {
+    console.error('Error during download:', error);
+    fs.unlinkSync(zipFilePath);
   });
 }
 
