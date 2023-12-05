@@ -1,11 +1,11 @@
-// main.js
+// main.ts
 
-const fs = require('fs');
-const player = require('play-sound')();
+import * as fs from 'fs';
+import * as player from 'play-sound';
 
 const musicFolder = './music/';
 
-function searchMusicByArtist(artist) {
+function searchMusicByArtist(artist: string) {
   const artistFolder = musicFolder + artist + '/';
   fs.readdir(artistFolder, (err, files) => {
     if (err) {
@@ -19,7 +19,7 @@ function searchMusicByArtist(artist) {
   });
 }
 
-function playMusic(artist, song) {
+function playMusic(artist: string, song: string) {
   const artistFolder = musicFolder + artist + '/';
   const songPath = artistFolder + song;
   player.play(songPath, (err) => {
