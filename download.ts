@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
-import AdmZip from 'adm-zip';
+import unzipper from 'unzipper';
 
 const musicFolderPath = path.join(__dirname, 'music');
 const zipUrl = 'https://ia802905.us.archive.org/zip_dir.php?path=/17/items/100ClassicalMusicMasterpieces.zip&formats=VBR%20MP3';
@@ -12,15 +12,15 @@ function checkIfMp3FilesExist(): boolean {
 }
 
 function extractZipFile(zipFilePath: string): void {
-  try {
-    const zip = new AdmZip(zipFilePath);
-    zip.extractAllTo(musicFolderPath, true);
-
-    fs.unlinkSync(zipFilePath);
-    console.log('Unzipping completed!');
-  } catch (error) {
-    console.error('Error extracting zip file:', error);
-  }
+  fs.createReadStream(zipFilePath)
+    .pipe(unzipper.Extract({ path: musicFolderPath }))
+    .on('close', () => {
+      fs.unlinkSync(zipFilePath);
+      console.log('Unzipping completed!');
+    })
+    .on('error', error => {
+      console.error('Error extracting zip file:', error);
+    });
 }
 
 function downloadAndUnzipMusic(): void {
