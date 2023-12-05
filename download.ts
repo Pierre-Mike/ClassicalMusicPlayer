@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+const fs = require('fs');
 import * as path from 'path';
 import * as https from 'https';
 import unzipper from 'unzipper';
