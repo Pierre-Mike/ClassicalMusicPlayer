@@ -3,26 +3,26 @@
 import * as fs from 'fs';
 import * as player from 'play-sound';
 
-const musicFolder = './music/';
+const musicFolder: string = './music/';
 
-function searchMusicByArtist(artist: string) {
-  const artistFolder = musicFolder + artist + '/';
-  fs.readdir(artistFolder, (err, files) => {
+function searchMusicByArtist(artist: string): void {
+  const artistFolder: string = musicFolder + artist + '/';
+  fs.readdir(artistFolder, (err: NodeJS.ErrnoException | null, files: string[]) => {
     if (err) {
       console.error('Error reading artist folder:', err);
       return;
     }
     console.log(`Songs by ${artist}:`);
-    files.forEach((file) => {
+    files.forEach((file: string) => {
       console.log(file);
     });
   });
 }
 
-function playMusic(artist: string, song: string) {
-  const artistFolder = musicFolder + artist + '/';
-  const songPath = artistFolder + song;
-  player.play(songPath, (err) => {
+function playMusic(artist: string, song: string): void {
+  const artistFolder: string = musicFolder + artist + '/';
+  const songPath: string = artistFolder + song;
+  player.play(songPath, (err: Error | null) => {
     if (err) {
       console.error('Error playing music:', err);
     }
@@ -30,8 +30,8 @@ function playMusic(artist: string, song: string) {
 }
 
 // Example usage
-const artist = 'artist1';
-const song = 'song1.mp3';
+const artist: string = 'artist1';
+const song: string = 'song1.mp3';
 
 searchMusicByArtist(artist);
 playMusic(artist, song);
