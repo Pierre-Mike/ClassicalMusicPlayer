@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
-import unzipper from 'unzipper';
+import extract from 'extract-zip';
 
 const musicFolderPath = path.join(__dirname, 'music');
 const zipUrl = 'https://ia802905.us.archive.org/zip_dir.php?path=/17/items/100ClassicalMusicMasterpieces.zip&formats=VBR%20MP3';
@@ -11,16 +11,19 @@ function checkIfMp3FilesExist(): boolean {
   return files.some((file: string) => path.extname(file) === '.mp3');
 }
 
-function extractZipFile(zipFilePath: string): void {
-  fs.createReadStream(zipFilePath)
-    .pipe(unzipper.Extract({ path: musicFolderPath }))
-    .on('close', () => {
-      fs.unlinkSync(zipFilePath);
-      console.log('Unzipping completed!');
-    })
-    .on('error', (error: any) => {
-      console.error('Error extracting zip file:', error);
+function extractZipFile(zipFilePath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    extract(zipFilePath, { dir: musicFolderPath }, (error: any) => {
+      if (error) {
+        console.error('Error extracting zip file:', error);
+        reject(error);
+      } else {
+        fs.unlinkSync(zipFilePath);
+        console.log('Unzipping completed!');
+        resolve();
+      }
     });
+  });
 }
 
 function downloadAndUnzipMusic(): void {
@@ -28,7 +31,13 @@ function downloadAndUnzipMusic(): void {
 
   if (fs.existsSync(zipFilePath)) {
     console.log('Music zip file already exists. Skipping download.');
-    extractZipFile(zipFilePath);
+    extractZipFile(zipFilePath)
+      .then(() => {
+        console.log('Download and unzipping completed!');
+      })
+      .catch((error) => {
+        console.error('Error during download and unzipping:', error);
+      });
     return;
   }
 
@@ -48,8 +57,13 @@ function downloadAndUnzipMusic(): void {
 
     zipFile.on('finish', () => {
       zipFile.close();
-      extractZipFile(zipFilePath);
-      console.log('Download and unzipping completed!');
+      extractZipFile(zipFilePath)
+        .then(() => {
+          console.log('Download and unzipping completed!');
+        })
+        .catch((error) => {
+          console.error('Error during download and unzipping:', error);
+        });
     });
   });
 }
