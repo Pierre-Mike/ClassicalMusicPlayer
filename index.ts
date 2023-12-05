@@ -31,8 +31,9 @@ function playMusic(song: string): void {
         if (err) {
             console.error('Error playing music:', err);
         }
+    }).catch((err: Error) => {
+        console.error('Error playing music:', err);
     });
 }
-
 
 searchMusicByArtist();
