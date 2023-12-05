@@ -2,7 +2,6 @@
 
 import * as fs from 'fs';
 import player from 'play-sound';
-import { PlayOptions } from 'play-sound';
 
 const musicFolder: string = './music/';
 
@@ -24,8 +23,8 @@ function searchMusicByArtist(artist: string): void {
 function playMusic(artist: string, song: string): void {
     const artistFolder: string = musicFolder + artist + '/';
     const songPath: string = artistFolder + song;
-    const playOptions: PlayOptions = { player: 'afplay', options: ['-v', '1'] /* lower volume for afplay on OSX */ };
-    player(playOptions).play(songPath, (err: Error | null) => {
+
+    player().play(songPath, (err: Error | null) => {
         if (err) {
             console.error('Error playing music:', err);
         }
