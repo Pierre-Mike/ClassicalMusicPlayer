@@ -11,23 +11,10 @@ function checkIfMp3FilesExist(): boolean {
   return files.some((file: string) => path.extname(file) === '.mp3');
 }
 
-function extractZipFile(zipFilePath: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    extract(zipFilePath, { dir: musicFolderPath }, (error: any) => {
-      if (error) {
-        console.error('Error extracting zip file:', error);
-        reject(error);
-      } else {
-        fs.unlinkSync(zipFilePath);
-        console.log('Unzipping completed!');
-        resolve();
-      }
-    });
-  });
-}
-
+const extractZipFile = (zipFilePath: string): Promise<void> => extract(zipFilePath, { dir: musicFolderPath })
+  
 function downloadAndUnzipMusic(): void {
-  const zipFilePath = path.join(__dirname, 'music.zip');
+  const zipFilePath = path.join(__dirname, '100ClassicalMusicMasterpieces.zip');
 
   if (fs.existsSync(zipFilePath)) {
     console.log('Music zip file already exists. Skipping download.');
