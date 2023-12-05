@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
-import AdmZip from 'adm-zip';
+import { AdmZip } from 'adm-zip';
 
 const musicFolderPath = path.join(__dirname, 'music');
 const zipUrl = 'https://ia802905.us.archive.org/zip_dir.php?path=/17/items/100ClassicalMusicMasterpieces.zip&formats=VBR%20MP3';
@@ -12,8 +12,13 @@ function checkIfMp3FilesExist(): boolean {
 }
 
 function downloadAndUnzipMusic(): void {
-  // TODO check if musid.zip already exists 
   const zipFilePath = path.join(__dirname, 'music.zip');
+
+  if (fs.existsSync(zipFilePath)) {
+    console.log('Music zip file already exists. Skipping download.');
+    return;
+  }
+
   const zipFile = fs.createWriteStream(zipFilePath);
 
   https.get(zipUrl, response => {
