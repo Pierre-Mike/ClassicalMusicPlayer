@@ -6,23 +6,26 @@ import player from 'play-sound';
 const musicFolder: string = './music/';
 
 function searchMusicByArtist(artist: string): void {
-    const artistFolder: string = musicFolder + artist + '/';
-    fs.readdir(artistFolder, (err: Error | null, files: string[]) => {
+    fs.readdir(musicFolder, (err: Error | null, files: string[]) => {
         if (err) {
-            console.error('Error reading artist folder:', err);
+            console.error('Error reading music folder:', err);
             return;
         }
         console.log(`Songs by ${artist}:`);
-        const randomIndex = Math.floor(Math.random() * files.length);
-        const randomSong = files[randomIndex];
+        const artistSongs = files.filter(file => file.includes(artist));
+        if (artistSongs.length === 0) {
+            console.log(`No songs found for ${artist}`);
+            return;
+        }
+        const randomIndex = Math.floor(Math.random() * artistSongs.length);
+        const randomSong = artistSongs[randomIndex];
         console.log(randomSong);
-        playMusic(artist, randomSong);
+        playMusic(randomSong);
     });
 }
 
-function playMusic(artist: string, song: string): void {
-    const artistFolder: string = musicFolder + artist + '/';
-    const songPath: string = artistFolder + song;
+function playMusic(song: string): void {
+    const songPath: string = musicFolder + song;
 
     player().play(songPath, (err: Error | null) => {
         if (err) {
