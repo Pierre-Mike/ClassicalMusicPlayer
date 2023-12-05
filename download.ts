@@ -18,7 +18,7 @@ function extractZipFile(zipFilePath: string): void {
       fs.unlinkSync(zipFilePath);
       console.log('Unzipping completed!');
     })
-    .on('error', error => {
+    .on('error', (error: any) => {
       console.error('Error extracting zip file:', error);
     });
 }
