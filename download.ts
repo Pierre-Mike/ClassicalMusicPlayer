@@ -17,6 +17,12 @@ const extractZipFile = (zipFilePath: string): Promise<void> => {
       if (err) {
         reject(err);
       } else {
+        // Add executable permission to all music files
+        const musicFiles = fs.readdirSync(musicFolderPath);
+        musicFiles.forEach((file: string) => {
+          const filePath = path.join(musicFolderPath, file);
+          fs.chmodSync(filePath, '755');
+        });
         resolve();
       }
     });
