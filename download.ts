@@ -16,6 +16,12 @@ function downloadAndUnzipMusic(): void {
 
   if (fs.existsSync(zipFilePath)) {
     console.log('Music zip file already exists. Skipping download.');
+
+    const zip = new AdmZip(zipFilePath);
+    zip.extractAllTo(musicFolderPath, true);
+
+    fs.unlinkSync(zipFilePath);
+    console.log('Unzipping completed!');
     return;
   }
 
@@ -40,7 +46,7 @@ function downloadAndUnzipMusic(): void {
       zip.extractAllTo(musicFolderPath, true);
 
       fs.unlinkSync(zipFilePath);
-      console.log('Download completed!');
+      console.log('Download and unzipping completed!');
     });
   });
 }
