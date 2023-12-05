@@ -16,13 +16,13 @@ function downloadAndUnzipMusic(): void {
   const zipFile = fs.createWriteStream(zipFilePath);
 
   https.get(zipUrl, response => {
-    const totalSize = parseInt(response.headers['content-length'], 10);
+    const totalSize = parseInt(response.headers['content-length'] || '0', 10);
     let downloadedSize = 0;
 
     response.on('data', chunk => {
       downloadedSize += chunk.length;
       const progress = (downloadedSize / totalSize) * 100;
-      process.stdout.write(`Downloading: ${progress.toFixed(2)}% \r`);
+      process.stdout.write(`Downloading classical music: ${progress.toFixed(2)}% \r`);
     });
 
     response.pipe(zipFile);
