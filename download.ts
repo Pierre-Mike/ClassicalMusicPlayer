@@ -11,22 +11,14 @@ function checkIfMp3FilesExist(): boolean {
   return files.some((file: string) => path.extname(file) === '.mp3');
 }
 
-const extractZipFile = (zipFilePath: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    extract(zipFilePath, { dir: musicFolderPath }, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        // Add executable permission to all music files
+const extractZipFile = async (zipFilePath: string): Promise<void> => {
+    await extract(zipFilePath, { dir: musicFolderPath })
         const musicFiles = fs.readdirSync(musicFolderPath);
         musicFiles.forEach((file: string) => {
           const filePath = path.join(musicFolderPath, file);
           fs.chmodSync(filePath, '755');
         });
-        resolve();
-      }
-    });
-  });
+  
 };
   
 async function downloadAndUnzipMusic(): Promise<void> {

@@ -1,0 +1,21 @@
+{
+  "name": "classicalmusicplayer",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/adm-zip": "^0.5.5",
+    "@types/play-sound": "^1.1.2",
+    "@types/unzipper": "^0.10.9",
+    "adm-zip": "^0.5.10",
+    "extract-zip": "^2.0.1",
+    "i": "^0.3.7",
+    "play-sound": "^1.1.6",
+    "unzipper": "^0.10.14"
+  }
+}
