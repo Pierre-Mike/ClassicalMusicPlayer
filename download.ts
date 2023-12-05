@@ -11,17 +11,20 @@ function checkIfMp3FilesExist(): boolean {
   return files.some(file => path.extname(file) === '.mp3');
 }
 
+function extractZipFile(zipFilePath: string): void {
+  const zip = new AdmZip(zipFilePath);
+  zip.extractAllTo(musicFolderPath, true);
+
+  fs.unlinkSync(zipFilePath);
+  console.log('Unzipping completed!');
+}
+
 function downloadAndUnzipMusic(): void {
   const zipFilePath = path.join(__dirname, 'music.zip');
 
   if (fs.existsSync(zipFilePath)) {
     console.log('Music zip file already exists. Skipping download.');
-
-    const zip = new AdmZip(zipFilePath);
-    zip.extractAllTo(musicFolderPath, true);
-
-    fs.unlinkSync(zipFilePath);
-    console.log('Unzipping completed!');
+    extractZipFile(zipFilePath);
     return;
   }
 
@@ -41,11 +44,7 @@ function downloadAndUnzipMusic(): void {
 
     zipFile.on('finish', () => {
       zipFile.close();
-
-      const zip = new AdmZip(zipFilePath);
-      zip.extractAllTo(musicFolderPath, true);
-
-      fs.unlinkSync(zipFilePath);
+      extractZipFile(zipFilePath);
       console.log('Download and unzipping completed!');
     });
   });
