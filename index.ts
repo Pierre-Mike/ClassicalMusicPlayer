@@ -26,7 +26,7 @@ function searchMusicByArtist(artist?: string): void {
 
 function playMusic(song: string): void {
     const songPath: string = musicFolder + song;
-
+    console.log(`Playing ${songPath}`);
     player().play(songPath, (err: Error | null) => {
         if (err) {
             console.error('Error playing music:', err);
@@ -34,7 +34,5 @@ function playMusic(song: string): void {
     });
 }
 
-// Example usage
-const artist1: string = 'artist1';
 
-searchMusicByArtist(artist1);
+searchMusicByArtist();
