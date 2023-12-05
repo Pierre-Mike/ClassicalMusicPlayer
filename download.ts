@@ -8,7 +8,7 @@ const zipUrl = 'https://ia802905.us.archive.org/zip_dir.php?path=/17/items/100Cl
 
 function checkIfMp3FilesExist(): boolean {
   const files = fs.readdirSync(musicFolderPath);
-  return files.some(file => path.extname(file) === '.mp3');
+  return files.some((file: string) => path.extname(file) === '.mp3');
 }
 
 function extractZipFile(zipFilePath: string): void {
@@ -18,7 +18,7 @@ function extractZipFile(zipFilePath: string): void {
       fs.unlinkSync(zipFilePath);
       console.log('Unzipping completed!');
     })
-    .on('error', error => {
+    .on('error', (error: any) => {
       console.error('Error extracting zip file:', error);
     });
 }
