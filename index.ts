@@ -14,9 +14,10 @@ function searchMusicByArtist(artist: string): void {
             return;
         }
         console.log(`Songs by ${artist}:`);
-        files.forEach((file: string) => {
-            console.log(file);
-        });
+        const randomIndex = Math.floor(Math.random() * files.length);
+        const randomSong = files[randomIndex];
+        console.log(randomSong);
+        playMusic(artist, randomSong);
     });
 }
 
@@ -33,13 +34,5 @@ function playMusic(artist: string, song: string): void {
 
 // Example usage
 const artist1: string = 'artist1';
-const song1: string = 'song1.mp3';
 
 searchMusicByArtist(artist1);
-playMusic(artist1, song1);
-
-const artist2: string = 'artist2';
-const song2: string = 'song2.mp3';
-
-searchMusicByArtist(artist2);
-playMusic(artist2, song2);
