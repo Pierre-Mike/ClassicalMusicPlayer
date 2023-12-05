@@ -18,7 +18,7 @@ function extractZipFile(zipFilePath: string): void {
       fs.unlinkSync(zipFilePath);
       console.log('Unzipping completed!');
     })
-    .on('error', (error: any) => {
+    .on('error', error => {
       console.error('Error extracting zip file:', error);
     });
 }
@@ -52,6 +52,11 @@ function downloadAndUnzipMusic(): void {
       console.log('Download and unzipping completed!');
     });
   });
+}
+
+// Create the music folder if it doesn't exist
+if (!fs.existsSync(musicFolderPath)) {
+  fs.mkdirSync(musicFolderPath);
 }
 
 if (!checkIfMp3FilesExist()) {
