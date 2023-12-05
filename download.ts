@@ -12,11 +12,15 @@ function checkIfMp3FilesExist(): boolean {
 }
 
 function extractZipFile(zipFilePath: string): void {
-  const zip = new AdmZip(zipFilePath);
-  zip.extractAllTo(musicFolderPath, true);
+  try {
+    const zip = new AdmZip(zipFilePath);
+    zip.extractAllTo(musicFolderPath, true);
 
-  fs.unlinkSync(zipFilePath);
-  console.log('Unzipping completed!');
+    fs.unlinkSync(zipFilePath);
+    console.log('Unzipping completed!');
+  } catch (error) {
+    console.error('Error extracting zip file:', error);
+  }
 }
 
 function downloadAndUnzipMusic(): void {
