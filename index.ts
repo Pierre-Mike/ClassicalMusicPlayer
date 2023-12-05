@@ -5,16 +5,16 @@ import player from 'play-sound';
 
 const musicFolder: string = './music/';
 
-function searchMusicByArtist(artist: string): void {
+function searchMusicByArtist(artist?: string): void {
     fs.readdir(musicFolder, (err: Error | null, files: string[]) => {
         if (err) {
             console.error('Error reading music folder:', err);
             return;
         }
-        console.log(`Songs by ${artist}:`);
-        const artistSongs = files.filter(file => file.includes(artist));
+        console.log(`Songs by ${artist || 'any artist'}:`);
+        const artistSongs = artist ? files.filter(file => file.includes(artist)) : files;
         if (artistSongs.length === 0) {
-            console.log(`No songs found for ${artist}`);
+            console.log(`No songs found for ${artist || 'any artist'}`);
             return;
         }
         const randomIndex = Math.floor(Math.random() * artistSongs.length);
