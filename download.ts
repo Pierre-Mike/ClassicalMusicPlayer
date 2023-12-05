@@ -11,20 +11,25 @@ function checkIfMp3FilesExist(): boolean {
   return files.some((file: string) => path.extname(file) === '.mp3');
 }
 
-const extractZipFile = (zipFilePath: string): Promise<void> => extract(zipFilePath, { dir: musicFolderPath })
+const extractZipFile = (zipFilePath: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    extract(zipFilePath, { dir: musicFolderPath }, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
   
-function downloadAndUnzipMusic(): void {
+async function downloadAndUnzipMusic(): Promise<void> {
   const zipFilePath = path.join(__dirname, '100ClassicalMusicMasterpieces.zip');
 
   if (fs.existsSync(zipFilePath)) {
     console.log('Music zip file already exists. Skipping download.');
-    extractZipFile(zipFilePath)
-      .then(() => {
-        console.log('Download and unzipping completed!');
-      })
-      .catch((error) => {
-        console.error('Error during download and unzipping:', error);
-      });
+    await extractZipFile(zipFilePath);
+    console.log('Download and unzipping completed!');
     return;
   }
 
@@ -42,15 +47,10 @@ function downloadAndUnzipMusic(): void {
 
     response.pipe(zipFile);
 
-    zipFile.on('finish', () => {
+    zipFile.on('finish', async () => {
       zipFile.close();
-      extractZipFile(zipFilePath)
-        .then(() => {
-          console.log('Download and unzipping completed!');
-        })
-        .catch((error) => {
-          console.error('Error during download and unzipping:', error);
-        });
+      await extractZipFile(zipFilePath);
+      console.log('Download and unzipping completed!');
     });
   }).on('error', (error) => {
     console.error('Error during download:', error);
