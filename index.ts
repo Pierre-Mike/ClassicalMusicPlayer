@@ -5,13 +5,11 @@ import * as fs from "fs";
 import player from "play-sound";
 import { exit } from "process";
 import prompts from "prompts";
-const { exec } = require('child_process');
+const { exec } = require("child_process");
 
 const cliPlayer = player();
 const musicFolder: string = "./music/";
 const allSongs: string[] = fs.readdirSync(musicFolder);
-
-let child:ChildProcess
 
 
 const playMusic = (song: string): Promise<ChildProcess> => {
@@ -29,16 +27,17 @@ const playMusic = (song: string): Promise<ChildProcess> => {
     });
 };
 
-
-
 for (const song of allSongs) {
     // use commend terminal say(song)
     const child = await playMusic(song);
-
-    process.on('exit', () => {
+    child.on("close", () => {
+        console.log("Music has ended");
+        return;
+    });
+    process.on("exit", () => {
         child?.kill();
     });
-    
+
     console.log(Array(song.length).join("__"));
     console.log(`Playing ${song}`);
     console.log(Array(song.length).join("__"));
@@ -53,7 +52,7 @@ for (const song of allSongs) {
     });
     if (res.action === "stop") {
         child.kill();
-        exit(0)
+        exit(0);
     }
     child.kill();
 }
