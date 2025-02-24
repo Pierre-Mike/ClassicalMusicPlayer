@@ -1,15 +1,8 @@
 # classicalmusicplayer
 
-To install dependencies:
+## Goal 
 
-```bash
-bun install
-```
+>I want to have a light music player in the terminal  
 
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.0.14. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- no network required 
+- no advertising

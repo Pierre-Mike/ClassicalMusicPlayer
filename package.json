@@ -3,7 +3,13 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
+    "@types/prompts": "2.4.9",
     "bun-types": "latest"
+  },
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -14,8 +20,8 @@
     "@types/unzipper": "^0.10.9",
     "adm-zip": "^0.5.10",
     "extract-zip": "^2.0.1",
-    "i": "^0.3.7",
     "play-sound": "^1.1.6",
+    "prompts": "^2.4.2",
     "unzipper": "^0.10.14"
   }
 }
