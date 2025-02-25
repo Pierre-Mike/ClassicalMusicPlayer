@@ -1,21 +1,21 @@
-// main.ts
-
 import { ChildProcess } from "child_process";
 import * as fs from "fs";
 import player from "play-sound";
-import { exit } from "process";
-import prompts from "prompts";
-const { exec } = require("child_process");
 
 const cliPlayer = player();
 const musicFolder: string = "./music/";
-const allSongs: string[] = fs.readdirSync(musicFolder);
-
+const randomizedSongList: string[] = fs.readdirSync(musicFolder)
+    .sort(() => Math.random() - 0.5);
+    
+let stdin = process.stdin;
+stdin.setRawMode(true);
+stdin.resume();
+stdin.setEncoding("utf8");
 
 const playMusic = (song: string): Promise<ChildProcess> => {
-    console.log(`Playing music ${song}`);
     const songPath: string = musicFolder + song;
-    console.log(`Playing ${songPath}`);
+
+    console.log(`\n 🎧 ${song.replace('.mp3', '')}`);
     return new Promise((resolve, reject) => {
         let child = cliPlayer.play(songPath, (err: Error | null) => {
             if (err) {
@@ -27,32 +27,35 @@ const playMusic = (song: string): Promise<ChildProcess> => {
     });
 };
 
-for (const song of allSongs) {
+for (const song of randomizedSongList) {
     // use commend terminal say(song)
     const child = await playMusic(song);
-    child.on("close", () => {
-        console.log("Music has ended");
-        return;
+    // on n keypress return
+    // without this, we would only get streams once enter is pressed
+    stdin.on("data", (key) => {
+        // ctrl-c ( end of text )
+        if (key.toString() === "n") {
+            child?.kill();
+            return;
+        }
+        if (key.toString() === "s") {
+            child?.kill();
+            process.exit();
+        }
+        // write the key to stdout all normal like
+        console.log(key);
     });
     process.on("exit", () => {
         child?.kill();
     });
 
-    console.log(Array(song.length).join("__"));
-    console.log(`Playing ${song}`);
-    console.log(Array(song.length).join("__"));
-    const res = await prompts({
-        type: "select",
-        name: "action",
-        message: "What do you want to do?",
-        choices: [
-            { title: "Next", value: "next" },
-            { title: "Stop", value: "stop" },
-        ],
+    console.log("Press 'n' to skip to the next song");
+    console.log("Press 's' to stop the music");
+
+    await new Promise<void>((resolve) => {
+        child.on("close", () => {
+            console.log("Music has ended");
+            resolve();
+        });
     });
-    if (res.action === "stop") {
-        child.kill();
-        exit(0);
-    }
-    child.kill();
 }
