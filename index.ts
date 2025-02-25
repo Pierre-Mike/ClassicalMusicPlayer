@@ -61,6 +61,7 @@ for (const song of randomizedSongList) {
 
     await new Promise<void>((resolve) => {
         child.on("exit",() => {
+            child.kill();
             stdin.removeListener("data", listener);
             resolve();
         });
