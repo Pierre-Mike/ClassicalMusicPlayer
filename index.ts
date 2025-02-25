@@ -65,6 +65,7 @@ for (const song of randomizedSongList) {
             resolve();
         });
         child.on("close", () => {
+            child.kill();
             stdin.removeListener("data", listener);
             resolve();
         });
